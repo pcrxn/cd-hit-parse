@@ -85,19 +85,25 @@ def read_clstr(clstr_file):
         for line in clstr_handle:
             # Search for a line that describes either a parent or child of a
             # cluster
-            if re.search("^\d+\t\d+aa, >[A-Z]{5}\d{4}\.\.\. .*", line):
+            parent_or_child_pattern = re.compile("^\d+\t\d+aa, >([\w\.]+)\.\.\. .*")
+            parent_pattern = re.compile("^\d+\t\d+aa, >[\w\.]+\.\.\. \*$")
+            parent_extract_pattern = re.compile("^\d+\t\d+aa, >([\w\.]+)\.\.\. \*$")
+            child_pattern = re.compile("^\d+\t\d+aa, >[\w\.]+\.\.\. at \d+\.\d+%$")
+            child_extract_pattern = re.compile("^\d+\t\d+aa, >([\w\.]+)\.\.\. at \d+\.\d+%$")
+
+            if re.search(parent_or_child_pattern, line):
 
                 # If the line looks like a parent:
-                if re.search("^\d+\t\d+aa, >[A-Z]{5}\d{4}\.\.\. \*", line):
-                    parent = re.search("^\d+\t\d+aa, >([A-Z]{5}\d{4})\.\.\. \*", line).group(1)
-                    # print(f"Parent: {parent}")
+                if re.search(parent_pattern, line):
+                    parent = re.findall(parent_extract_pattern, line)[0]
+                    print(f"Parent: {parent}")
                     # Add parent
                     clstr_dict[parent] = []
 
                 # If the line looks like a child:
-                elif re.search("^\d+\t\d+aa, >[A-Z]{5}\d{4}\.\.\. at.*", line):
-                    child = re.search("^\d+\t\d+aa, >([A-Z]{5}\d{4})\.\.\. at.*", line).group(1)
-                    # print(f"Child: {child}")
+                elif re.search(child_pattern, line):
+                    child = re.search(child_extract_pattern, line).group(1)
+                    print(f"Child: {child}")
                     # Add child to parent
                     clstr_dict[parent].append(child)
 
