@@ -85,11 +85,11 @@ def read_clstr(clstr_file):
         for line in clstr_handle:
             # Search for a line that describes either a parent or child of a
             # cluster
-            parent_or_child_pattern = re.compile("^\d+\t\d+aa, >([\w\.]+)\.\.\. .*")
-            parent_pattern = re.compile("^\d+\t\d+aa, >[\w\.]+\.\.\. \*$")
-            parent_extract_pattern = re.compile("^\d+\t\d+aa, >([\w\.]+)\.\.\. \*$")
-            child_pattern = re.compile("^\d+\t\d+aa, >[\w\.]+\.\.\. at \d+\.\d+%$")
-            child_extract_pattern = re.compile("^\d+\t\d+aa, >([\w\.]+)\.\.\. at \d+\.\d+%$")
+            parent_or_child_pattern = re.compile("^\d+.*$")
+            parent_pattern = re.compile("^\d+\t\d+aa, >.*\.\.\. \*$")
+            parent_extract_pattern = re.compile("^\d+\t\d+aa, >(.*)\.\.\. \*$")
+            child_pattern = re.compile("^\d+\t\d+aa, >.*\.\.\. at \d+\.\d+%$")
+            child_extract_pattern = re.compile("^\d+\t\d+aa, >(.*)\.\.\. at \d+\.\d+%$")
 
             if re.search(parent_or_child_pattern, line):
 
